@@ -15,7 +15,16 @@ Esta API fornece o núcleo inteligente do ecossistema Clyvo, integrando dados de
 ## 📊 Modelo Entidade Relacionamento (MER)
 ```mermaid
 erDiagram
+    TUTOR ||--o{ PET : "cuida de"
     RACA ||--o{ PET : "possui"
+    
+    TUTOR {
+        String cpf PK
+        String nome
+        String telefone
+        String email
+        Integer quantidadePets
+    }
     RACA {
         Long id PK
         String nome
@@ -30,6 +39,7 @@ erDiagram
         Double peso
         String statusLongevidade
         Long raca_id FK
+        String tutor_cpf FK
     }
 ```
 

@@ -30,6 +30,10 @@ public class Pet {
     @JoinColumn(name = "raca_id")
     private Raca raca;
 
+    @ManyToOne
+    @JoinColumn(name = "tutor_cpf")
+    private Tutor tutor;
+
     // Campo calculado ou persistido para a IA
     private String statusLongevidade; 
 }
