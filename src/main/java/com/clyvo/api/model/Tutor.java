@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 @Entity
-@Table(name = "CLY_TB_TUTOR")
+@Table(name = "T_TUTOR")
 @Getter @Setter
 @NoArgsConstructor @AllArgsConstructor
 @Builder

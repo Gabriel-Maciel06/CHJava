@@ -16,21 +16,19 @@ Esta API fornece o núcleo inteligente do ecossistema Clyvo, integrando dados de
 ```mermaid
 erDiagram
     TUTOR ||--o{ PET : "cuida de"
-    RACA ||--o{ PET : "possui"
+    TUTOR ||--o{ EVENTO : "solicita"
+    RACA ||--o{ PET : "define"
+    PET ||--o{ EVENTO : "participa"
+    PET ||--o{ TRATAMENTO : "recebe"
+    MEDICO_ESPECIALISTA ||--o{ EVENTO : "realiza"
+    EVENTO ||--|| HISTORICO_CLINICO : "gera"
     
     TUTOR {
         String cpf PK
         String nome
         String telefone
         String email
-        Integer quantidadePets
-    }
-    RACA {
-        Long id PK
-        String nome
-        String propensaoDoenca
-        Integer expectativaVida
-        String cuidadosEspeciais
+        Integer qtd_pets
     }
     PET {
         Long id PK
@@ -40,6 +38,34 @@ erDiagram
         String statusLongevidade
         Long raca_id FK
         String tutor_cpf FK
+    }
+    MEDICO_ESPECIALISTA {
+        Long id PK
+        String nome
+        String especialidade
+    }
+    EVENTO {
+        Long id PK
+        String tipo
+        Long id_pet FK
+        String id_tutor FK
+        Long id_medico FK
+    }
+    HISTORICO_CLINICO {
+        Long id PK
+        Long id_evento FK
+        LocalDate dataEvento
+        LocalDate dataVencimento
+        String status
+        String observacoesIa
+    }
+    TRATAMENTO {
+        Long id PK
+        Long id_pet FK
+        String nomeMedicamento
+        String frequencia
+        LocalDate dataInicio
+        LocalDate dataFinal
     }
 ```
 
