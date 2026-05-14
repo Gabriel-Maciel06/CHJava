@@ -53,9 +53,11 @@ CREATE TABLE T_EVENTO (
     id_pet NUMBER,
     id_tutor VARCHAR2(14),
     id_medico_especialista NUMBER,
+    id_clinica NUMBER,
     CONSTRAINT fk_evento_pet FOREIGN KEY (id_pet) REFERENCES T_PET(id),
     CONSTRAINT fk_evento_tutor FOREIGN KEY (id_tutor) REFERENCES T_TUTOR(cpf),
-    CONSTRAINT fk_evento_medico FOREIGN KEY (id_medico_especialista) REFERENCES T_MEDICO_ESPECIALISTA(id)
+    CONSTRAINT fk_evento_medico FOREIGN KEY (id_medico_especialista) REFERENCES T_MEDICO_ESPECIALISTA(id),
+    CONSTRAINT fk_evento_clinica FOREIGN KEY (id_clinica) REFERENCES T_CLINICA(id)
 );
 
 -- 7. TABELA DE HISTÓRICO CLÍNICO

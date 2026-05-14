@@ -14,4 +14,6 @@ public class Evento {
     private Tutor tutor;
     @ManyToOne @JoinColumn(name = "id_medico_especialista")
     private MedicoEspecialista medico;
+    @ManyToOne @JoinColumn(name = "id_clinica")
+    private Clinica clinica;
 }

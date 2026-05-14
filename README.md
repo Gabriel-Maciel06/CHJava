@@ -21,6 +21,7 @@ erDiagram
     PET ||--o{ EVENTO : "participa"
     PET ||--o{ TRATAMENTO : "recebe"
     MEDICO_ESPECIALISTA ||--o{ EVENTO : "realiza"
+    T_CLINICA ||--o{ EVENTO : "sedia"
     EVENTO ||--|| HISTORICO_CLINICO : "gera"
     
     TUTOR {
@@ -29,6 +30,11 @@ erDiagram
         String telefone
         String email
         Integer qtd_pets
+    }
+    CLINICA {
+        Long id PK
+        String nomeCnpj
+        String telefone
     }
     PET {
         Long id PK
@@ -50,6 +56,7 @@ erDiagram
         Long id_pet FK
         String id_tutor FK
         Long id_medico FK
+        Long id_clinica FK
     }
     HISTORICO_CLINICO {
         Long id PK
