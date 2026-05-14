@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.*;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+import com.clyvo.api.dto.PetDTO;
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/pets")
 public class PetController {
@@ -30,12 +33,21 @@ public class PetController {
         return ResponseEntity.ok(repository.findAll(paginacao));
     }
 
+    @PostMapping
+    public ResponseEntity<Pet> salvar(@RequestBody @Valid PetDTO dto) {
+        Pet pet = Pet.builder()
+                .nome(dto.getNome())
+                .dataNascimento(dto.getDataNascimento())
+                .peso(dto.getPeso())
+                .build();
+        return ResponseEntity.status(201).body(repository.save(pet));
+    }
+
     @GetMapping("/{id}")
     public EntityModel<Pet> buscarPorId(@PathVariable Long id) {
         Pet pet = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Pet não encontrado"));
 
-        // Adiciona insight da IA dinamicamente
         pet.setStatusLongevidade(service.calcularInsightIA(pet));
 
         return EntityModel.of(pet,

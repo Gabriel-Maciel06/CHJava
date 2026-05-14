@@ -3,6 +3,7 @@ package com.clyvo.api.service;
 import com.clyvo.api.model.Pet;
 import com.clyvo.api.repository.PetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -14,6 +15,7 @@ public class PetService {
     @Autowired
     private PetRepository repository;
 
+    @Cacheable("petInsights")
     public String calcularInsightIA(Pet pet) {
         int idade = Period.between(pet.getDataNascimento(), LocalDate.now()).getYears();
         String raca = pet.getRaca().getNome();
