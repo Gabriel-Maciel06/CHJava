@@ -1,0 +1,105 @@
+{
+	"info": {
+		"name": "Clyvo Vet - Challenge API",
+		"description": "Collection completa para testes do ecossistema Clyvo Vet (Java Advanced)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Pets",
+			"item": [
+				{
+					"name": "Listar Pets (Paginação)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/pets?page=0&size=5",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8080",
+							"path": ["api", "pets"],
+							"query": [
+								{ "key": "page", "value": "0" },
+								{ "key": "size", "value": "5" }
+							]
+						}
+					}
+				},
+				{
+					"name": "Buscar Pet por ID (HATEOAS)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8080/api/pets/1"
+					}
+				}
+			]
+		},
+		{
+			"name": "Tutores",
+			"item": [
+				{
+					"name": "Trocar Pet (Listar por CPF)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8080/api/tutores/12345678900/pets"
+					}
+				}
+			]
+		},
+		{
+			"name": "Clínica & Especialistas",
+			"item": [
+				{
+					"name": "Cadastrar Clínica",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nomeCnpj\": \"VetLife - 12.345.678/0001-90\",\n    \"telefone\": \"(11) 98888-7777\"\n}"
+						},
+						"url": "http://localhost:8080/api/clinicas"
+					}
+				},
+				{
+					"name": "Cadastrar Especialista",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nome\": \"Dr. Anderson\",\n    \"especialidade\": \"NEURO\"\n}"
+						},
+						"url": "http://localhost:8080/api/especialistas"
+					}
+				}
+			]
+		},
+		{
+			"name": "Eventos e Histórico",
+			"item": [
+				{
+					"name": "Registrar Evento (Consulta)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"tipo\": \"CONSULTA ESPECIALISTA\",\n    \"pet\": { \"id\": 1 },\n    \"tutor\": { \"cpf\": \"12345678900\" },\n    \"medico\": { \"id\": 1 }\n}"
+						},
+						"url": "http://localhost:8080/api/eventos"
+					}
+				}
+			]
+		}
+	]
+}
