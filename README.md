@@ -17,11 +17,14 @@ Esta API fornece o núcleo inteligente do ecossistema Clyvo, integrando dados de
 erDiagram
     TUTOR ||--o{ PET : "cuida de"
     TUTOR ||--o{ EVENTO : "solicita"
+    TUTOR ||--o{ CONTEXTO_LOCALIZACAO : "possui"
     RACA ||--o{ PET : "define"
     PET ||--o{ EVENTO : "participa"
     PET ||--o{ TRATAMENTO : "recebe"
     MEDICO_ESPECIALISTA ||--o{ EVENTO : "realiza"
-    T_CLINICA ||--o{ EVENTO : "sedia"
+    CLINICA ||--o{ EVENTO : "sedia"
+    CLINICA ||--o{ SERVICO_CLINICA : "oferece"
+    TIPO_EVENTO_CATALOGO ||--o{ SERVICO_CLINICA : "tipifica"
     EVENTO ||--|| HISTORICO_CLINICO : "gera"
     
     TUTOR {
@@ -31,10 +34,35 @@ erDiagram
         String email
         Integer qtd_pets
     }
+    CONTEXTO_LOCALIZACAO {
+        Long id PK
+        String cpf_tutor FK
+        Double latitude_atual
+        Double longitude_atual
+        Timestamp data_hora_captura
+        String cidade_detectada
+    }
     CLINICA {
         Long id PK
         String nomeCnpj
         String telefone
+        Double latitude
+        Double longitude
+        String bairro
+        String cidade
+        String estado
+        Boolean atendimento_24h
+    }
+    TIPO_EVENTO_CATALOGO {
+        Long id PK
+        String descricao
+        String categoria
+    }
+    SERVICO_CLINICA {
+        Long id PK
+        Long id_clinica FK
+        Long id_tipo_catalogo FK
+        Boolean disponivel
     }
     PET {
         Long id PK
