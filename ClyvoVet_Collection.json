@@ -100,6 +100,43 @@
 					}
 				}
 			]
+		},
+		{
+			"name": "Match Preditivo & Geolocalização",
+			"item": [
+				{
+					"name": "Sugerir Clínicas Próximas (Match Preditivo)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/match-preditivo/clinicas?cpfTutor=12345678900&idTipoServico=1",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8080",
+							"path": ["api", "match-preditivo", "clinicas"],
+							"query": [
+								{ "key": "cpfTutor", "value": "12345678900" },
+								{ "key": "idTipoServico", "value": "1" }
+							]
+						}
+					}
+				},
+				{
+					"name": "Registrar Localização do Tutor",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"tutor\": { \"cpf\": \"12345678900\" },\n    \"latitudeAtual\": -23.563000,\n    \"longitudeAtual\": -46.654000,\n    \"dataHoraCaptura\": \"2026-05-18T10:00:00\",\n    \"cidadeDetectada\": \"São Paulo\"\n}"
+						},
+						"url": "http://localhost:8080/api/contexto-localizacao"
+					}
+				}
+			]
 		}
 	]
 }
