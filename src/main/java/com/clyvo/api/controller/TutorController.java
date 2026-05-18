@@ -4,21 +4,21 @@ import com.clyvo.api.model.Pet;
 import com.clyvo.api.model.Tutor;
 import com.clyvo.api.repository.PetRepository;
 import com.clyvo.api.repository.TutorRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import java.net.URI;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/tutores")
+@RequiredArgsConstructor
 public class TutorController {
 
-    @Autowired
-    private TutorRepository tutorRepository;
-
-    @Autowired
-    private PetRepository petRepository;
+    private final TutorRepository tutorRepository;
+    private final PetRepository petRepository;
 
     @GetMapping("/{cpf}")
     public ResponseEntity<Tutor> buscarPerfil(@PathVariable String cpf) {
@@ -35,7 +35,12 @@ public class TutorController {
 
     @PostMapping
     public ResponseEntity<Tutor> salvar(@RequestBody Tutor tutor) {
-        return ResponseEntity.status(201).body(tutorRepository.save(tutor));
+        Tutor salvo = tutorRepository.save(tutor);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{cpf}")
+                .buildAndExpand(salvo.getCpf())
+                .toUri();
+        return ResponseEntity.created(uri).body(salvo);
     }
 
     @PutMapping("/{cpf}")

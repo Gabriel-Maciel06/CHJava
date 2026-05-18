@@ -10,8 +10,8 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<String> handleNotFound(RuntimeException ex) {
+    @ExceptionHandler(RecursoNaoEncontradoException.class)
+    public ResponseEntity<String> handleNotFound(RecursoNaoEncontradoException ex) {
         return ResponseEntity.status(404).body(ex.getMessage());
     }
 

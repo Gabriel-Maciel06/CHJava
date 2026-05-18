@@ -2,18 +2,18 @@ package com.clyvo.api.controller;
 
 import com.clyvo.api.model.Clinica;
 import com.clyvo.api.service.MatchPreditivoService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/match-preditivo")
+@RequiredArgsConstructor
 public class MatchPreditivoController {
 
-    @Autowired
-    private MatchPreditivoService matchPreditivoService;
+    private final MatchPreditivoService matchPreditivoService;
 
     @GetMapping("/clinicas")
     public ResponseEntity<List<Clinica>> sugerirClinicas(

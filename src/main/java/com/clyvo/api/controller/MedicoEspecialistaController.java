@@ -6,9 +6,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-@RestController @RequestMapping("/api/especialistas")
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import java.net.URI;
+@RestController
+@RequiredArgsConstructor @RequestMapping("/api/especialistas")
 public class MedicoEspecialistaController {
-    @Autowired private MedicoEspecialistaRepository repository;
+    private final MedicoEspecialistaRepository repository;
     @GetMapping public ResponseEntity<Page<MedicoEspecialista>> listar(Pageable p) { return ResponseEntity.ok(repository.findAll(p)); }
     @PostMapping public ResponseEntity<MedicoEspecialista> salvar(@RequestBody MedicoEspecialista m) { return ResponseEntity.ok(repository.save(m)); }
     

@@ -4,9 +4,13 @@ import com.clyvo.api.repository.TratamentoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-@RestController @RequestMapping("/api/tratamentos")
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import java.net.URI;
+@RestController
+@RequiredArgsConstructor @RequestMapping("/api/tratamentos")
 public class TratamentoController {
-    @Autowired private TratamentoRepository repository;
+    private final TratamentoRepository repository;
     @PostMapping public ResponseEntity<Tratamento> salvar(@RequestBody Tratamento t) { return ResponseEntity.ok(repository.save(t)); }
     
     @PutMapping("/{id}")

@@ -5,13 +5,16 @@ import com.clyvo.api.repository.ContextoLocalizacaoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import java.net.URI;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/contexto-localizacao")
 public class ContextoLocalizacaoController {
 
-    @Autowired
-    private ContextoLocalizacaoRepository repository;
+    private final ContextoLocalizacaoRepository repository;
 
     @PostMapping
     public ResponseEntity<ContextoLocalizacao> registrarLocalizacao(@RequestBody ContextoLocalizacao localizacao) {
