@@ -8,4 +8,18 @@ import org.springframework.web.bind.annotation.*;
 public class TratamentoController {
     @Autowired private TratamentoRepository repository;
     @PostMapping public ResponseEntity<Tratamento> salvar(@RequestBody Tratamento t) { return ResponseEntity.ok(repository.save(t)); }
+    
+    @PutMapping("/{id}")
+    public ResponseEntity<Tratamento> atualizar(@PathVariable Long id, @RequestBody Tratamento t) {
+        if(!repository.existsById(id)) return ResponseEntity.notFound().build();
+        t.setId(id);
+        return ResponseEntity.ok(repository.save(t));
+    }
+    
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletar(@PathVariable Long id) {
+        if(!repository.existsById(id)) return ResponseEntity.notFound().build();
+        repository.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
 }

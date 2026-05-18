@@ -9,4 +9,18 @@ public class HistoricoClinicoController {
     @Autowired private HistoricoClinicoRepository repository;
     @GetMapping("/{id}") public ResponseEntity<HistoricoClinico> buscar(@PathVariable Long id) { return repository.findById(id).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build()); }
     @PostMapping public ResponseEntity<HistoricoClinico> salvar(@RequestBody HistoricoClinico h) { return ResponseEntity.ok(repository.save(h)); }
+    
+    @PutMapping("/{id}")
+    public ResponseEntity<HistoricoClinico> atualizar(@PathVariable Long id, @RequestBody HistoricoClinico h) {
+        if(!repository.existsById(id)) return ResponseEntity.notFound().build();
+        h.setId(id);
+        return ResponseEntity.ok(repository.save(h));
+    }
+    
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletar(@PathVariable Long id) {
+        if(!repository.existsById(id)) return ResponseEntity.notFound().build();
+        repository.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
 }

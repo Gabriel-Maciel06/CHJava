@@ -54,4 +54,22 @@ public class PetController {
                 linkTo(methodOn(PetController.class).buscarPorId(id)).withSelfRel(),
                 linkTo(methodOn(PetController.class).listar(null)).withRel("lista-pets"));
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Pet> atualizar(@PathVariable Long id, @RequestBody @Valid PetDTO dto) {
+        Pet pet = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Pet não encontrado"));
+        
+        pet.setNome(dto.getNome());
+        pet.setDataNascimento(dto.getDataNascimento());
+        pet.setPeso(dto.getPeso());
+        
+        return ResponseEntity.ok(repository.save(pet));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletar(@PathVariable Long id) {
+        repository.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
 }

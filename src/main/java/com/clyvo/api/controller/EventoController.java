@@ -11,4 +11,18 @@ public class EventoController {
     @Autowired private EventoRepository repository;
     @GetMapping public ResponseEntity<Page<Evento>> listar(Pageable p) { return ResponseEntity.ok(repository.findAll(p)); }
     @PostMapping public ResponseEntity<Evento> salvar(@RequestBody Evento e) { return ResponseEntity.ok(repository.save(e)); }
+    
+    @PutMapping("/{id}")
+    public ResponseEntity<Evento> atualizar(@PathVariable Long id, @RequestBody Evento e) {
+        if(!repository.existsById(id)) return ResponseEntity.notFound().build();
+        e.setId(id);
+        return ResponseEntity.ok(repository.save(e));
+    }
+    
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletar(@PathVariable Long id) {
+        if(!repository.existsById(id)) return ResponseEntity.notFound().build();
+        repository.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
 }

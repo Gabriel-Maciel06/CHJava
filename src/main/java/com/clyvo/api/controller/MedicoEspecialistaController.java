@@ -11,4 +11,18 @@ public class MedicoEspecialistaController {
     @Autowired private MedicoEspecialistaRepository repository;
     @GetMapping public ResponseEntity<Page<MedicoEspecialista>> listar(Pageable p) { return ResponseEntity.ok(repository.findAll(p)); }
     @PostMapping public ResponseEntity<MedicoEspecialista> salvar(@RequestBody MedicoEspecialista m) { return ResponseEntity.ok(repository.save(m)); }
+    
+    @PutMapping("/{id}")
+    public ResponseEntity<MedicoEspecialista> atualizar(@PathVariable Long id, @RequestBody MedicoEspecialista m) {
+        if(!repository.existsById(id)) return ResponseEntity.notFound().build();
+        m.setId(id);
+        return ResponseEntity.ok(repository.save(m));
+    }
+    
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletar(@PathVariable Long id) {
+        if(!repository.existsById(id)) return ResponseEntity.notFound().build();
+        repository.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
 }

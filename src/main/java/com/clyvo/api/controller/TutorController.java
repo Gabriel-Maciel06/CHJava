@@ -32,4 +32,26 @@ public class TutorController {
         List<Pet> pets = petRepository.findByTutorCpf(cpf);
         return ResponseEntity.ok(pets);
     }
+
+    @PostMapping
+    public ResponseEntity<Tutor> salvar(@RequestBody Tutor tutor) {
+        return ResponseEntity.status(201).body(tutorRepository.save(tutor));
+    }
+
+    @PutMapping("/{cpf}")
+    public ResponseEntity<Tutor> atualizar(@PathVariable String cpf, @RequestBody Tutor tutorAtualizado) {
+        return tutorRepository.findById(cpf).map(tutor -> {
+            tutor.setNome(tutorAtualizado.getNome());
+            tutor.setTelefone(tutorAtualizado.getTelefone());
+            tutor.setEmail(tutorAtualizado.getEmail());
+            tutor.setQtdPets(tutorAtualizado.getQtdPets());
+            return ResponseEntity.ok(tutorRepository.save(tutor));
+        }).orElse(ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("/{cpf}")
+    public ResponseEntity<Void> deletar(@PathVariable String cpf) {
+        tutorRepository.deleteById(cpf);
+        return ResponseEntity.noContent().build();
+    }
 }
