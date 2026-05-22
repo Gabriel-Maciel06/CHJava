@@ -23,6 +23,98 @@ O **Clyvo Vet** é uma plataforma inovadora baseada em análise de dados e Intel
 - **Jakarta Bean Validation** - Garantia de integridade de dados na entrada da API.
 - **Spring HATEOAS** - Maturidade REST Nível 3 (Hypermedia as the Engine of Application State).
 
+## 📊 Modelo Entidade Relacionamento (MER)
+```mermaid
+erDiagram
+    TUTOR ||--o{ PET : "cuida de"
+    TUTOR ||--o{ EVENTO : "solicita"
+    TUTOR ||--o{ CONTEXTO_LOCALIZACAO : "possui"
+    RACA ||--o{ PET : "define"
+    PET ||--o{ EVENTO : "participa"
+    PET ||--o{ TRATAMENTO : "recebe"
+    MEDICO_ESPECIALISTA ||--o{ EVENTO : "realiza"
+    CLINICA ||--o{ EVENTO : "sedia"
+    CLINICA ||--o{ SERVICO_CLINICA : "oferece"
+    TIPO_EVENTO_CATALOGO ||--o{ SERVICO_CLINICA : "tipifica"
+    EVENTO ||--|| HISTORICO_CLINICO : "gera"
+    
+    TUTOR {
+        String cpf PK
+        String nome
+        String telefone
+        String email
+        Integer qtd_pets
+    }
+    CONTEXTO_LOCALIZACAO {
+        Long id PK
+        String cpf_tutor FK
+        Double latitude_atual
+        Double longitude_atual
+        Timestamp data_hora_captura
+        String cidade_detectada
+    }
+    CLINICA {
+        Long id PK
+        String nomeCnpj
+        String telefone
+        Double latitude
+        Double longitude
+        String bairro
+        String cidade
+        String estado
+        Boolean atendimento_24h
+    }
+    TIPO_EVENTO_CATALOGO {
+        Long id PK
+        String descricao
+        String categoria
+    }
+    SERVICO_CLINICA {
+        Long id PK
+        Long id_clinica FK
+        Long id_tipo_catalogo FK
+        Boolean disponivel
+    }
+    PET {
+        Long id PK
+        String nome
+        LocalDate dataNascimento
+        Double peso
+        String statusLongevidade
+        Long raca_id FK
+        String tutor_cpf FK
+    }
+    MEDICO_ESPECIALISTA {
+        Long id PK
+        String nome
+        String especialidade
+    }
+    EVENTO {
+        Long id PK
+        String tipo
+        Long id_pet FK
+        String id_tutor FK
+        Long id_medico FK
+        Long id_clinica FK
+    }
+    HISTORICO_CLINICO {
+        Long id PK
+        Long id_evento FK
+        LocalDate dataEvento
+        LocalDate dataVencimento
+        String status
+        String observacoesIa
+    }
+    TRATAMENTO {
+        Long id PK
+        Long id_pet FK
+        String nomeMedicamento
+        String frequencia
+        LocalDate dataInicio
+        LocalDate dataFinal
+    }
+```
+
 ## 🏗️ Arquitetura e Padrões (Clean Architecture)
 A aplicação adere estritamente às melhores práticas de Engenharia de Software exigidas pela FIAP:
 1. **Padrão DTO:** Entidades de banco (`@Entity`) não são expostas na web. Toda a comunicação ocorre via objetos de transferência de dados (DTOs) estritamente validados.
