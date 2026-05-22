@@ -23,4 +23,6 @@ public class PetDTO {
 
     @NotBlank(message = "O CPF do tutor é obrigatório")
     private String tutorCpf;
+
+    private String statusLongevidade;
 }

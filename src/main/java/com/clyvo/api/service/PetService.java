@@ -3,7 +3,9 @@ package com.clyvo.api.service;
 import com.clyvo.api.dto.PetDTO;
 import com.clyvo.api.exception.RecursoNaoEncontradoException;
 import com.clyvo.api.model.Pet;
+import com.clyvo.api.model.Tutor;
 import com.clyvo.api.repository.PetRepository;
+import com.clyvo.api.repository.TutorRepository;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +20,7 @@ import java.time.Period;
 public class PetService {
 
     private final PetRepository repository;
+    private final TutorRepository tutorRepository;
 
     @Cacheable("petInsights")
     public String calcularInsightIA(Pet pet) {
@@ -43,10 +46,11 @@ public class PetService {
 
     public PetDTO buscarPorId(Long id) {
         Pet pet = repository.findById(id)
-                .orElseThrow(() -> new RecursoNaoEncontradoException("Pet não encontrado"));
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Pet não encontrado com id " + id));
         
         PetDTO dto = mapToDTO(pet);
-        // Não vamos forçar IA no DTO aqui para não quebrar a estrutura, ou podemos se houver campo
+        // Garantindo que a IA rode e povoe o status
+        dto.setStatusLongevidade(calcularInsightIA(pet));
         return dto;
     }
 
@@ -55,7 +59,10 @@ public class PetService {
         pet.setNome(dto.getNome());
         pet.setDataNascimento(dto.getDataNascimento());
         pet.setPeso(dto.getPeso());
-        // Tutor precisaria ser buscado no banco para associar corretamente, mas para CP simplificado setamos null ou buscamos
+        
+        Tutor tutor = tutorRepository.findById(dto.getTutorCpf())
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Tutor não encontrado com o CPF informado: " + dto.getTutorCpf()));
+        pet.setTutor(tutor);
         
         Pet salvo = repository.save(pet);
         return mapToDTO(salvo);
@@ -63,11 +70,18 @@ public class PetService {
 
     public PetDTO atualizar(Long id, PetDTO dto) {
         Pet pet = repository.findById(id)
-                .orElseThrow(() -> new RecursoNaoEncontradoException("Pet não encontrado"));
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Pet não encontrado com id " + id));
         
         pet.setNome(dto.getNome());
         pet.setDataNascimento(dto.getDataNascimento());
         pet.setPeso(dto.getPeso());
+        
+        // Atualiza tutor se mudou
+        if (!pet.getTutor().getCpf().equals(dto.getTutorCpf())) {
+            Tutor tutor = tutorRepository.findById(dto.getTutorCpf())
+                    .orElseThrow(() -> new RecursoNaoEncontradoException("Tutor não encontrado com CPF: " + dto.getTutorCpf()));
+            pet.setTutor(tutor);
+        }
         
         Pet salvo = repository.save(pet);
         return mapToDTO(salvo);
@@ -75,7 +89,7 @@ public class PetService {
 
     public void deletar(Long id) {
         if (!repository.existsById(id)) {
-            throw new RecursoNaoEncontradoException("Pet não encontrado");
+            throw new RecursoNaoEncontradoException("Pet não encontrado com id " + id);
         }
         repository.deleteById(id);
     }
@@ -86,7 +100,6 @@ public class PetService {
         dto.setNome(pet.getNome());
         dto.setDataNascimento(pet.getDataNascimento());
         dto.setPeso(pet.getPeso());
-        // Assumindo que Tutor pode não estar fetchado
         if (pet.getTutor() != null) {
             dto.setTutorCpf(pet.getTutor().getCpf());
         }
